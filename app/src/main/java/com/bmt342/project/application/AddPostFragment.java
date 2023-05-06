@@ -1,21 +1,33 @@
 package com.bmt342.project.application;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,16 +84,60 @@ public class AddPostFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button GetLOcationBtn = view.findViewById(R.id.fragmentGetLOcationBtn);
-
-        GetLOcationBtn.setOnClickListener(new View.OnClickListener() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        Button GetLocationBtn = view.findViewById(R.id.fragmentGetLOcationBtn);
+        GetLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) throws SecurityException{
+                getLastLocation();
             }
         });
+    }
+
+    FusedLocationProviderClient fusedLocationProviderClient;
+    double lalitude, longitude;
+    private final static  int REQUEST_CODE=100;
+
+    public void getLastLocation(){
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location!=null){
+                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                        List<Address> addresses = null;
+                        try {
+                            addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                            lalitude = addresses.get(0).getLatitude();
+                            longitude = addresses.get(0).getLongitude();
+                            System.out.println(lalitude+" "+longitude);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+
+        }else{
+            askPermission();
+        }
+    }
+
+    public  void askPermission(){
+        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode==REQUEST_CODE){
+            if (grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                getLastLocation();
+            }else {
+                Toast.makeText(getContext(), "İzin Gerekli", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
