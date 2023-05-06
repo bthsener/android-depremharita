@@ -6,6 +6,15 @@ public class Post {
     private int id;
     private String content;
     private Date publishDate;
+    private Location location;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public Post(){
         super();

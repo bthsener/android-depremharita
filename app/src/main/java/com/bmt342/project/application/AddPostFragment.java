@@ -23,6 +23,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
@@ -34,7 +41,7 @@ import java.util.Locale;
  * Use the {@link AddPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddPostFragment extends Fragment {
+public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,8 +87,35 @@ public class AddPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_post, container, false);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.MiniMapFragment);
+        mapFragment.getMapAsync(this);
+        return view;
     }
+
+    private GoogleMap mMap;
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        LatLng latLng = new LatLng(37.7749, -122.4194);
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(latLng);
+        mMap.addMarker(markerOptions);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 12);
+        mMap.moveCamera(cameraUpdate);
+    }
+
+    private void updateMap(double latitude, double longitude) {
+        LatLng location = new LatLng(latitude, longitude);
+        mMap.clear(); // Haritadaki mevcut işaretleri temizleyin
+        mMap.addMarker(new MarkerOptions().position(location).title("Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -100,6 +134,7 @@ public class AddPostFragment extends Fragment {
     FusedLocationProviderClient fusedLocationProviderClient;
     double lalitude, longitude;
     private final static  int REQUEST_CODE=100;
+    private com.bmt342.project.application.model.Location locationT;
 
     public void getLastLocation(){
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -114,6 +149,12 @@ public class AddPostFragment extends Fragment {
                             lalitude = addresses.get(0).getLatitude();
                             longitude = addresses.get(0).getLongitude();
                             System.out.println(lalitude+" "+longitude);
+
+                            updateMap(lalitude,longitude);
+
+                            //locationT.setLatitude(lalitude);
+                            //locationT.setLongitude(longitude);
+
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -140,4 +181,5 @@ public class AddPostFragment extends Fragment {
             }
         }
     }
+
 }
