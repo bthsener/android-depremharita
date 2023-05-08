@@ -10,42 +10,118 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="@id/addressLine"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Gönderi başlığı: "
+            android:gravity="start"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            ></EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/person"
+            android:text="İhtiyaç sahibi kişi sayısı: 5"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            >
+        </TextView>
+
+        <com.google.android.material.slider.Slider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/person"
+            android:id="@+id/sliderPerson"
+            android:valueFrom="1"
+            android:valueTo="20"
+            android:stepSize="1"
+            android:value="5"
+            >
+        </com.google.android.material.slider.Slider>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="açıklama: "
+            android:gravity="start"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/custom_edittext"
+            android:padding="10dp"
+            ></EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addressLine"
+        app:layout_constraintBottom_toTopOf="@id/firstLinear"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:maxHeight="75dp"
+            android:gravity="center_vertical"
+            android:id="@+id/addressTextView"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="ADRES:"
+            >
+
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/firstLinear"
         app:layout_constraintTop_toTopOf="parent"
         android:weightSum="2"
+        android:layout_marginTop="350dp"
         >
 
         <Button
-            android:id="@+id/fragmentGetLOcationBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Lokasyonu Al"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:padding="2dp"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="350dp"
-            android:layout_weight="1"
-            />
+                android:id="@+id/fragmentGetLOcationBtn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Lokasyonu Al"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="2dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
 
-        <Button
-            android:id="@+id/fragmentSendPostBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="350dp"
-            android:padding="2dp"
-            android:text="Kaydet"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_weight="1"
-            />
+                />
 
+            <Button
+                android:id="@+id/fragmentSendPostBtn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:padding="2dp"
+                android:text="Kaydet"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_weight="1"
+                />
     </LinearLayout>
 
     <LinearLayout

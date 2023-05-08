@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.slider.Slider;
 
 import java.io.IOException;
 import java.util.List;
@@ -81,6 +83,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -116,12 +119,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
     }
 
-
+    Slider slider;
+    TextView sliderPerson;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        addressTextView = view.findViewById(R.id.addressTextView);
         Button GetLocationBtn = view.findViewById(R.id.fragmentGetLOcationBtn);
         GetLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,10 +134,22 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                 getLastLocation();
             }
         });
+
+
+        slider = view.findViewById(R.id.sliderPerson);
+        sliderPerson = view.findViewById(R.id.person);
+        slider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                sliderPerson.setText("İhtiyaç sahibi kişi sayısı: "+(int)value);
+            }
+        });
+
     }
 
     FusedLocationProviderClient fusedLocationProviderClient;
     double lalitude, longitude;
+    TextView addressTextView;
     private final static  int REQUEST_CODE=100;
     private com.bmt342.project.application.model.Location locationT;
 
@@ -149,7 +166,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             lalitude = addresses.get(0).getLatitude();
                             longitude = addresses.get(0).getLongitude();
                             System.out.println(lalitude+" "+longitude);
-
+                            addressTextView.setText("ADRES: "+addresses.get(0).getAddressLine(0));
                             updateMap(lalitude,longitude);
 
                             //locationT.setLatitude(lalitude);
