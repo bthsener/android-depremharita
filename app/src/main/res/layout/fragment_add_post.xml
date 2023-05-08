@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toTopOf="@id/firstLinear"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         >
         <TextView
             android:layout_width="match_parent"
@@ -94,14 +94,15 @@
         android:layout_marginTop="350dp"
         >
 
-        <Button
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/fragmentGetLOcationBtn"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                app:cornerRadius="16dp"
                 android:text="Lokasyonu Al"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:padding="2dp"
                 android:layout_marginHorizontal="5dp"
@@ -109,22 +110,26 @@
 
                 />
 
-            <Button
-                android:id="@+id/fragmentSendPostBtn"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:padding="2dp"
-                android:text="Kaydet"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_weight="1"
-                />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="FOTOĞRAF ÇEK"
+            app:icon="@drawable/ic_camera"
+            android:textSize="15sp"
+            app:cornerRadius="16dp"
+            android:textAlignment="center"
+            app:iconGravity="textStart"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_weight="1"/>
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/firstLinear"
@@ -133,9 +138,30 @@
         <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
             android:layout_height="290dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/MiniMapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment">
-    </androidx.fragment.app.FragmentContainerView>
-    </LinearLayout>
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fragmentSendPostBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="2dp"
+            app:cornerRadius="16dp"
+            android:text="Kaydet"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/MiniMapFragment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
