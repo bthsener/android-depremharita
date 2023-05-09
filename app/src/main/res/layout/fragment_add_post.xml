@@ -18,6 +18,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:id="@+id/posttitle"
             android:hint="Gönderi başlığı: "
             android:gravity="start"
             android:layout_marginHorizontal="10dp"
@@ -52,6 +53,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="120dp"
+            android:id="@+id/postdescription"
             android:hint="açıklama: "
             android:gravity="start"
             android:layout_marginHorizontal="10dp"

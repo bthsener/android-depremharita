@@ -21,15 +21,18 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bmt342.project.application.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -39,11 +42,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.slider.Slider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -127,9 +135,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
+            post.setImage(imageBitmap);
         }
     }
-
 
     private GoogleMap mMap;
     @Override
@@ -154,12 +162,22 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
     }
 
-
+    EditText postTitle, postDescription;
+    Post post;
+    com.bmt342.project.application.model.Address address;
+    Location location;
+    Button sendPostBtn;
     Slider slider;
     TextView sliderPerson;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("posts");
+
+        post = new Post();
+        address = new com.bmt342.project.application.model.Address();
+        post.setAddress(address);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         addressTextView = view.findViewById(R.id.addressTextView);
@@ -171,24 +189,50 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-
         slider = view.findViewById(R.id.sliderPerson);
         sliderPerson = view.findViewById(R.id.person);
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                 sliderPerson.setText("İhtiyaç sahibi kişi sayısı: "+(int)value);
+                post.setPerson((int) value);
             }
         });
 
+        sendPostBtn = view.findViewById(R.id.fragmentSendPostBtn);
+        postTitle = view.findViewById(R.id.posttitle);
+        postDescription = view.findViewById(R.id.postdescription);
+        sendPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(postTitle.getText().toString())&&!TextUtils.isEmpty(postDescription.getText().toString())&&post.getAddress().getLatitude()!=0){
+                    post.setTitle(postTitle.getText().toString());
+                    post.setContent(postDescription.getText().toString());
+                    post.setPublishDate(new Date());
 
+                    myRef.push().setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity(), "kaydedildi", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "HATALI", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    System.out.println(post.getPublishDate().toString());
+                    Toast.makeText(getActivity(), "basarili", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(), "tüm alanları doldurunuz", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     FusedLocationProviderClient fusedLocationProviderClient;
     double lalitude, longitude;
     TextView addressTextView;
     private final static  int REQUEST_CODE=100;
-    private com.bmt342.project.application.model.Location locationT;
 
     public void getLastLocation(){
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -202,13 +246,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
                             lalitude = addresses.get(0).getLatitude();
                             longitude = addresses.get(0).getLongitude();
+
+                            address.setLatitude(lalitude);
+                            address.setLongitude(longitude);
+                            address.setAddressLine(addresses.get(0).getAddressLine(0));
+
                             System.out.println(lalitude+" "+longitude);
                             addressTextView.setText("ADRES: "+addresses.get(0).getAddressLine(0));
                             updateMap(lalitude,longitude);
-
-                            //locationT.setLatitude(lalitude);
-                            //locationT.setLongitude(longitude);
-
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
