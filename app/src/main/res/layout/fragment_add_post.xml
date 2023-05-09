@@ -75,8 +75,8 @@
             android:maxHeight="75dp"
             android:gravity="center_vertical"
             android:id="@+id/addressTextView"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:text="ADRES:"
@@ -91,7 +91,7 @@
         android:id="@+id/firstLinear"
         app:layout_constraintTop_toTopOf="parent"
         android:weightSum="2"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="330dp"
         >
 
         <com.google.android.material.button.MaterialButton
@@ -105,22 +105,21 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:padding="2dp"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
-
                 />
-
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/cameraButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
+            android:layout_marginHorizontal="10dp"
             android:text="FOTOĞRAF ÇEK"
             app:icon="@drawable/ic_camera"
             android:textSize="15sp"
             app:cornerRadius="16dp"
+            android:padding="2dp"
             android:textAlignment="center"
             app:iconGravity="textStart"
             android:layout_marginBottom="5dp"
@@ -129,39 +128,57 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/firstLinear"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:id="@+id/mapAndImg"
         >
-
         <androidx.fragment.app.FragmentContainerView
-            android:layout_width="match_parent"
-            android:layout_height="290dp"
-            android:layout_marginTop="5dp"
-            android:id="@+id/MiniMapFragment"
+            android:layout_width="170dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/PostMapFragment"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1"
             />
 
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="250dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/addImage"
+            android:layout_weight="1"
+            >
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/mapAndImg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical"
+        >
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fragmentSendPostBtn"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:padding="2dp"
             app:cornerRadius="16dp"
             android:text="Kaydet"
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/MiniMapFragment"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal|center_vertical"
             />
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

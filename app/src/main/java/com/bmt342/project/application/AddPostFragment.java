@@ -1,24 +1,32 @@
 package com.bmt342.project.application;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,23 +42,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.slider.Slider;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddPostFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -58,15 +59,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddPostFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AddPostFragment newInstance(String param1, String param2) {
         AddPostFragment fragment = new AddPostFragment();
         Bundle args = new Bundle();
@@ -83,18 +75,61 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView mImageView;
+    private Button cameraButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.MiniMapFragment);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.PostMapFragment);
         mapFragment.getMapAsync(this);
+
+        mImageView = view.findViewById(R.id.addImage);
+        cameraButton = view.findViewById(R.id.cameraButton);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+            }
+        });
+
         return view;
     }
+
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+
+    private void dispatchTakePictureIntent() {
+        // Kamera izni kontrolü
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Kullanıcıdan kamera izni isteme
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        } else {
+            // İzinler verildiyse kamera açma intenti başlat
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+        }
+    }
+
 
     private GoogleMap mMap;
     @Override
@@ -103,7 +138,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        LatLng latLng = new LatLng(37.7749, -122.4194);
+        LatLng latLng = new LatLng(36.216598, 36.152493);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng);
         mMap.addMarker(markerOptions);
@@ -114,10 +149,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     private void updateMap(double latitude, double longitude) {
         LatLng location = new LatLng(latitude, longitude);
-        mMap.clear(); // Haritadaki mevcut işaretleri temizleyin
+        mMap.clear();
         mMap.addMarker(new MarkerOptions().position(location).title("Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
     }
+
 
     Slider slider;
     TextView sliderPerson;
@@ -144,6 +180,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                 sliderPerson.setText("İhtiyaç sahibi kişi sayısı: "+(int)value);
             }
         });
+
 
     }
 
@@ -188,15 +225,42 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode==REQUEST_CODE){
-            if (grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                getLastLocation();
-            }else {
-                Toast.makeText(getContext(), "İzin Gerekli", Toast.LENGTH_SHORT).show();
-            }
+    private static final int REQUEST_CODE_CAMERA = 100;
+    private static final int REQUEST_CODE_LOCATION = 200;
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_CAMERA);
+        } else {
+            getLastLocation();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), "Kamera izni verildi", Toast.LENGTH_SHORT).show();
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(getContext(), "Kamera izni gerekiyor", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_CODE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), "Konum izni verildi", Toast.LENGTH_SHORT).show();
+                    getLastLocation();
+                } else {
+                    Toast.makeText(getContext(), "Konum izni gerekiyor", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 
 }
