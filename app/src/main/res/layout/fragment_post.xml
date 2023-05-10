@@ -6,7 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PostFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <Button
         android:id="@+id/fragmentAddingPostBtn"
         android:layout_width="60dp"
@@ -16,7 +22,7 @@
         android:text="+"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="25dp"
+        android:layout_margin="20dp"
         android:background="@drawable/round_button"
         ></Button>
 

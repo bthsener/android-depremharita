@@ -135,7 +135,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-            post.setImage(imageBitmap);
+            //post.setImage(imageBitmap);
+            post.setImageUrl(post.convertBitmapToString(imageBitmap));
         }
     }
 
@@ -250,6 +251,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             address.setLatitude(lalitude);
                             address.setLongitude(longitude);
                             address.setAddressLine(addresses.get(0).getAddressLine(0));
+                            address.setCity(addresses.get(0).getLocality());
 
                             System.out.println(lalitude+" "+longitude);
                             addressTextView.setText("ADRES: "+addresses.get(0).getAddressLine(0));
