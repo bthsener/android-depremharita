@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_postFragment_to_addPostFragment"
             app:destination="@id/addPostFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -45,6 +48,15 @@
         tools:layout="@layout/fragment_add_post" >
         <action
             android:id="@+id/action_addPostFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.bmt342.project.application.PostDetailsFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" >
+        <action
+            android:id="@+id/action_postDetailsFragment_to_postFragment"
             app:destination="@id/postFragment" />
     </fragment>
 </navigation>

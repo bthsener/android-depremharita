@@ -5,9 +5,10 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Post {
+public class Post implements Serializable {
     private int id;
     private String title;
     private int person;
