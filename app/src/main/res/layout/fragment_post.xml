@@ -13,17 +13,17 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragmentAddingPostBtn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:text="+"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_margin="20dp"
-        android:background="@drawable/round_button"
-        ></Button>
+        android:backgroundTint="@color/depremHaritaRed"
+        app:borderWidth="0dp"
+        android:src="@drawable/ic_add"
+        android:tintMode="@color/white"
+        ></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

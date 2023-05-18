@@ -253,7 +253,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             address.setAddressLine(addresses.get(0).getAddressLine(0));
                             address.setCity(addresses.get(0).getLocality());
 
-                            System.out.println(lalitude+" "+longitude);
+                            System.out.println("AAAAAAAA"+lalitude+" "+longitude);
                             addressTextView.setText("ADRES: "+addresses.get(0).getAddressLine(0));
                             updateMap(lalitude,longitude);
                         } catch (IOException e) {

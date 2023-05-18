@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.bmt342.project.application.model.Post;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -113,7 +114,7 @@ public class PostFragment extends Fragment {
             }
         });
 
-        Button fragmentAddingPostBtn = view.findViewById(R.id.fragmentAddingPostBtn);
+        FloatingActionButton fragmentAddingPostBtn = view.findViewById(R.id.fragmentAddingPostBtn);
 
         fragmentAddingPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override

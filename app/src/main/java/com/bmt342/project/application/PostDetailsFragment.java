@@ -96,7 +96,6 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
         addressLine.setText(post.getAddress().getAddressLine());
         image.setImageBitmap(post.convertStringToBitmap(post.getImageUrl()));
 
-
         return view;
     }
 
