@@ -26,9 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,10 +107,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     }
                     if (mMap != null) {
                         mMap.clear();
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        for (LatLng latLng : locationList) {
-                            mMap.addMarker(markerOptions.position(latLng));
-                        }
+                        addHeatMap();
                     }
                 }
                 @Override
@@ -137,16 +136,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         mMap.setLatLngBoundsForCameraTarget(turkeyBounds);
 
-        MarkerOptions markerOptions = new MarkerOptions();
-
-        Iterator<LatLng> iterator = locationList.iterator();
-        while (iterator.hasNext()){
-            mMap.addMarker(markerOptions.position(iterator.next()));
-        }
-
-        LatLng ankaraLatlng = new LatLng(39.925533,32.866287);
+        LatLng ankaraLatlng = new LatLng(37.409125,36.094003);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(ankaraLatlng, 5);
         mMap.moveCamera(cameraUpdate);
     }
+
+    private void addHeatMap() {
+        List<WeightedLatLng> weightedLatLngs = new ArrayList<>();
+
+        for (LatLng latLng : locationList) {
+            weightedLatLngs.add(new WeightedLatLng(latLng,1));
+        }
+
+        HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
+                .weightedData(weightedLatLngs)
+                .radius(50).build();
+
+        TileOverlay overlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
+    }
+
 
 }
