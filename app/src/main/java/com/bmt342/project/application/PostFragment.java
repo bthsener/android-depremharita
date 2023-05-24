@@ -103,6 +103,8 @@ public class PostFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Post post = dataSnapshot.getValue(Post.class);
+                    String postKey = dataSnapshot.getKey();
+                    post.setPostKey(postKey);
                     postList.add(post);
                 }
                 adapter.notifyDataSetChanged();

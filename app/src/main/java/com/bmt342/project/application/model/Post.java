@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class Post implements Serializable {
     private int id;
+    private String postKey;
     private String title;
     private int person;
     private String content;
@@ -64,6 +65,18 @@ public class Post implements Serializable {
     public Post(){
         super();
     }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
+    }
+
+    /*public void setId(String id){
+        this.id = id;
+    }*/
 
     public int getId(){
         return id;
