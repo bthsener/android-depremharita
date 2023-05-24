@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,7 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
 
         title.setText(post.getTitle());
         content.setText(post.getContent());
+        content.setMovementMethod(new ScrollingMovementMethod());
         addressLine.setText(post.getAddress().getAddressLine());
         image.setImageBitmap(post.convertStringToBitmap(post.getImageUrl()));
 
