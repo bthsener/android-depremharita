@@ -3,67 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/detailsMainLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".PostDetailsFragment"
-    >
+    tools:context=".PostDetailsFragment">
 
-    <ImageView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/imageDetails"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+        android:layout_height="match_parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/imageDetails"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/titleDetails"
-        app:layout_constraintTop_toBottomOf="@+id/imageDetails"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="AAAA"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="20dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleDetails"
+            app:layout_constraintTop_toBottomOf="@+id/imageDetails"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="AAAA"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            />
 
-        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contentDetails"
+            app:layout_constraintTop_toBottomOf="@+id/titleDetails"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="AAAA"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="200dp"
-        android:id="@+id/contentDetails"
-        app:layout_constraintTop_toBottomOf="@+id/titleDetails"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="AAAA"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:scrollbars="vertical"
-        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/AddressLineDetails"
+            app:layout_constraintTop_toBottomOf="@+id/contentDetails"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="AAAA"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/AddressLineDetails"
-        app:layout_constraintTop_toBottomOf="@+id/contentDetails"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="AAAA"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_margin="10dp"
-        android:layout_marginHorizontal="20dp"
-        />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/detailsMapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/detailsMapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/AddressLineDetails"
+            />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

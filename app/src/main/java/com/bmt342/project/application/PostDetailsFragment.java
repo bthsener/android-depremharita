@@ -3,6 +3,7 @@ package com.bmt342.project.application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.ScrollingMovementMethod;
@@ -74,7 +75,7 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
     }
 
     Post post;
-    TextView title, content, addressLine;
+    TextView titleTextView, contentTextView, addressLineTextView;
     ImageView image;
 
     @Override
@@ -82,9 +83,9 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
 
-        title = view.findViewById(R.id.titleDetails);
-        content = view.findViewById(R.id.contentDetails);
-        addressLine = view.findViewById(R.id.AddressLineDetails);
+        titleTextView = view.findViewById(R.id.titleDetails);
+        contentTextView = view.findViewById(R.id.contentDetails);
+        addressLineTextView = view.findViewById(R.id.AddressLineDetails);
         image = view.findViewById(R.id.imageDetails);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.detailsMapFragment);
         mapFragment.getMapAsync(this);
@@ -92,10 +93,10 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
         Bundle bundle = getArguments();
         post = (Post) bundle.getSerializable("post");
 
-        title.setText(post.getTitle());
-        content.setText(post.getContent());
-        content.setMovementMethod(new ScrollingMovementMethod());
-        addressLine.setText(post.getAddress().getAddressLine());
+        titleTextView.setText(post.getTitle());
+        contentTextView.setText(post.getContent());
+        //contentTextView.setMovementMethod(new ScrollingMovementMethod());
+        addressLineTextView.setText(post.getAddress().getAddressLine());
         image.setImageBitmap(post.convertStringToBitmap(post.getImageUrl()));
 
         return view;
