@@ -5,15 +5,19 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bmt342.project.application.model.Post;
+import com.bmt342.project.application.utils.SharedPreferenceUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +25,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,16 +85,27 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
     Post post;
     TextView titleTextView, contentTextView, addressLineTextView;
     ImageView image;
+    Button deletePostBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
 
+        SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
+
+        deletePostBtn = view.findViewById(R.id.deletePostBtn);
         titleTextView = view.findViewById(R.id.titleDetails);
         contentTextView = view.findViewById(R.id.contentDetails);
         addressLineTextView = view.findViewById(R.id.AddressLineDetails);
         image = view.findViewById(R.id.imageDetails);
+
+        if (sharedPreferenceUtil.getLoginStatus()){
+            deletePostBtn.setVisibility(view.VISIBLE);
+        }else {
+            deletePostBtn.setVisibility(view.GONE);
+        }
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.detailsMapFragment);
         mapFragment.getMapAsync(this);
 
@@ -99,6 +118,28 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
         addressLineTextView.setText(post.getAddress().getAddressLine());
         image.setImageBitmap(post.convertStringToBitmap(post.getImageUrl()));
 
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("posts");
+        String postKey = post.getPostKey();
+        DatabaseReference deleteRef = myRef.child(postKey);
+
+        deletePostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Post başarıyla silindi", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(view).navigate(R.id.action_postDetailsFragment_to_postFragment);
+                        } else {
+                            Toast.makeText(getActivity(), "Silme işlemi başarısız", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
         return view;
     }
 
