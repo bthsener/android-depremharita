@@ -1,5 +1,6 @@
 package com.bmt342.project.application;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +73,32 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Button adminLoginBtn = view.findViewById(R.id.adminLogin);
+        Button adminLogoutBtn = view.findViewById(R.id.adminLogout);
         Button fragmentMapBtn = view.findViewById(R.id.fragmentMapBtn);
         Button fragmentPostBtn = view.findViewById(R.id.fragmentPostBtn);
 
+        if (getLoginStatus()){
+            adminLoginBtn.setVisibility(view.GONE);
+        }else {
+            adminLogoutBtn.setVisibility(view.GONE);
+        }
+
+        adminLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_adminLoginFragment);
+            }
+        });
+
+        adminLogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteLoginStatus();
+                adminLogoutBtn.setVisibility(view.GONE);
+                adminLoginBtn.setVisibility(view.VISIBLE);
+            }
+        });
         fragmentMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,4 +113,19 @@ public class MainFragment extends Fragment {
             }
         });
     }
+
+    boolean isLogin = false;
+    private boolean getLoginStatus(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        isLogin = sharedPreferences.getBoolean("isLogin", false);
+        return  isLogin;
+    }
+
+    private void deleteLoginStatus(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("isLogin");
+        editor.apply();
+    }
+
 }

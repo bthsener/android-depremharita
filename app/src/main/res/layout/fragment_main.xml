@@ -27,11 +27,12 @@
 
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fragmentMapBtn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Haritayı Görüntüle"
+        app:cornerRadius="16dp"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -40,13 +41,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:padding="5dp"
         android:backgroundTint="@color/depremHaritaRed"
-        ></Button>
+        />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fragmentPostBtn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="DUYURULARI Görüntüle"
+        app:cornerRadius="16dp"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -56,9 +58,38 @@
         android:layout_marginTop="20dp"
         android:padding="5dp"
         android:backgroundTint="@color/depremHaritaRed"
-        ></Button>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Çıkış Yap"
+            android:id="@+id/adminLogout"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giriş Yap"
+            android:id="@+id/adminLogin"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

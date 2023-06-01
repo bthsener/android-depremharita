@@ -1,0 +1,115 @@
+package com.bmt342.project.application;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AdminLoginFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class AdminLoginFragment extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public AdminLoginFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment AdminLoginFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static AdminLoginFragment newInstance(String param1, String param2) {
+        AdminLoginFragment fragment = new AdminLoginFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.fragment_admin_login, container, false);
+    }
+
+    EditText usernameEditText, passwordEditText;
+    Button loginBtn;
+    boolean login;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        login = false;
+        loginBtn = view.findViewById(R.id.loginButton);
+        usernameEditText = view.findViewById(R.id.username);
+        passwordEditText = view.findViewById(R.id.password);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                login = login(username,password);
+                if (login) {
+                    saveLoginStatus();
+                    Navigation.findNavController(view).navigate(R.id.action_adminLoginFragment_to_mainFragment);
+                }
+            }
+        });
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+
+    private void saveLoginStatus() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isLogin", true);
+        editor.apply();
+    }
+
+
+    private boolean login(String username, String password){
+        if (username.equals("admin")&&password.equals("admin")){
+            return true;
+        }
+        return false;
+    }
+}
