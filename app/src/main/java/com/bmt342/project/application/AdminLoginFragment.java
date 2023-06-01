@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.bmt342.project.application.utils.SharedPreferenceUtil;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AdminLoginFragment#newInstance} factory method to
@@ -76,6 +78,7 @@ public class AdminLoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
         login = false;
         loginBtn = view.findViewById(R.id.loginButton);
         usernameEditText = view.findViewById(R.id.username);
@@ -86,9 +89,9 @@ public class AdminLoginFragment extends Fragment {
             public void onClick(View view) {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                login = login(username,password);
+                login = sharedPreferenceUtil.login(username,password);
                 if (login) {
-                    saveLoginStatus();
+                    sharedPreferenceUtil.saveLoginStatus();
                     Navigation.findNavController(view).navigate(R.id.action_adminLoginFragment_to_mainFragment);
                 }
             }
@@ -98,18 +101,4 @@ public class AdminLoginFragment extends Fragment {
     }
 
 
-    private void saveLoginStatus() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isLogin", true);
-        editor.apply();
-    }
-
-
-    private boolean login(String username, String password){
-        if (username.equals("admin")&&password.equals("admin")){
-            return true;
-        }
-        return false;
-    }
 }

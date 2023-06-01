@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.bmt342.project.application.utils.SharedPreferenceUtil;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MainFragment#newInstance} factory method to
@@ -73,12 +75,13 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
         Button adminLoginBtn = view.findViewById(R.id.adminLogin);
         Button adminLogoutBtn = view.findViewById(R.id.adminLogout);
         Button fragmentMapBtn = view.findViewById(R.id.fragmentMapBtn);
         Button fragmentPostBtn = view.findViewById(R.id.fragmentPostBtn);
 
-        if (getLoginStatus()){
+        if (sharedPreferenceUtil.getLoginStatus()){
             adminLoginBtn.setVisibility(view.GONE);
         }else {
             adminLogoutBtn.setVisibility(view.GONE);
@@ -94,7 +97,7 @@ public class MainFragment extends Fragment {
         adminLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteLoginStatus();
+                sharedPreferenceUtil.deleteLoginStatus();
                 adminLogoutBtn.setVisibility(view.GONE);
                 adminLoginBtn.setVisibility(view.VISIBLE);
             }
@@ -114,18 +117,6 @@ public class MainFragment extends Fragment {
         });
     }
 
-    boolean isLogin = false;
-    private boolean getLoginStatus(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        isLogin = sharedPreferences.getBoolean("isLogin", false);
-        return  isLogin;
-    }
 
-    private void deleteLoginStatus(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("isLogin");
-        editor.apply();
-    }
 
 }
