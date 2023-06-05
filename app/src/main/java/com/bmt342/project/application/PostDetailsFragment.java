@@ -2,11 +2,14 @@ package com.bmt342.project.application;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +135,15 @@ public class PostDetailsFragment extends Fragment implements OnMapReadyCallback 
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Post başarıyla silindi", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.action_postDetailsFragment_to_postFragment);
+                            //Navigation.findNavController(view).navigate(R.id.action_postDetailsFragment_to_postFragment);
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Navigation.findNavController(view).navigate(R.id.action_postDetailsFragment_to_postFragment);
+                                }
+                            }, 500);
+
                         } else {
                             Toast.makeText(getActivity(), "Silme işlemi başarısız", Toast.LENGTH_SHORT).show();
                         }

@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -222,7 +223,16 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                         }
                     });
                     System.out.println(post.getPublishDate().toString());
-                    Toast.makeText(getActivity(), "basarili", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "basarili", Toast.LENGTH_SHORT).show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Navigation.findNavController(view).navigate(R.id.action_addPostFragment_to_postFragment);
+                        }
+                    }, 1000);
+
+                    //Navigation.findNavController(view).navigate(R.id.action_addPostFragment_to_postFragment);
                 }else {
                     Toast.makeText(getActivity(), "tüm alanları doldurunuz", Toast.LENGTH_SHORT).show();
                 }

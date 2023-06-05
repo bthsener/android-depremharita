@@ -3,9 +3,11 @@ package com.bmt342.project.application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.preference.PreferenceManager;
@@ -115,6 +117,19 @@ public class MainFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_postFragment);
             }
         });
+
+        NavController navController = Navigation.findNavController(requireView());
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (navController.getCurrentDestination().getId() == R.id.mainFragment) {
+                    requireActivity().finish();
+                } else {
+                    navController.navigateUp();
+                }
+            }
+        });
+
     }
 
 

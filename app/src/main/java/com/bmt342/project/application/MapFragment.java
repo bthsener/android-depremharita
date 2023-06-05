@@ -154,6 +154,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         TileOverlay overlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
     }
-
-
 }
