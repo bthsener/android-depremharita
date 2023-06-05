@@ -1,6 +1,8 @@
 package com.bmt342.project.application.model;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     private String addressLine;
     private String city;
     private double latitude;
